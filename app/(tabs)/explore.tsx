@@ -1,26 +1,27 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { Collapsible } from '@/components/ui/collapsible';
 import { ExternalLink } from '@/components/external-link';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { Collapsible } from '@/components/ui/collapsible';
 import { IconSymbol } from '@/components/ui/icon-symbol';
 import { Fonts } from '@/constants/theme';
 
 export default function TabTwoScreen() {
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
+      headerBackgroundColor={{ light: '#D0D0D0', dark: '#39626fff' }}
       headerImage={
         <IconSymbol
           size={310}
-          color="#808080"
+          color="#ffffffff"
           name="chevron.left.forwardslash.chevron.right"
           style={styles.headerImage}
         />
       }>
+
       <ThemedView style={styles.titleContainer}>
         <ThemedText
           type="title"
@@ -94,13 +95,22 @@ export default function TabTwoScreen() {
           ),
         })}
       </Collapsible>
+
+      <TouchableOpacity style={styles.fab}>
+        <IconSymbol
+          size={32}
+          color="#ffffffff"
+          name="add.circle.fill"
+        />
+      </TouchableOpacity>
+
     </ParallaxScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   headerImage: {
-    color: '#808080',
+    color: '#aff7faff',
     bottom: -90,
     left: -35,
     position: 'absolute',
@@ -109,4 +119,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 8,
   },
+  fab: {
+    position: 'absolute',
+    width: 46,
+    height: 46,
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 20,
+    bottom: 20,
+    backgroundColor: '#0275d8',
+    borderRadius: 30,
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+
 });
