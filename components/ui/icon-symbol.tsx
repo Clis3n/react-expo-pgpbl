@@ -6,7 +6,7 @@ import { SymbolViewProps, SymbolWeight } from 'expo-symbols';
 import { ComponentProps } from 'react';
 import { OpaqueColorValue, type StyleProp, type TextStyle } from 'react-native';
 
-type IconMapping = Record<SymbolViewProps['name'], ComponentProps<typeof MaterialIcons>['name']>;
+type IconMapping = Record<SymbolViewProps['name'], ComponentProps<typeof Octicons>['name']>;
 type IconSymbolName = keyof typeof MAPPING;
 
 /**
@@ -20,7 +20,7 @@ const MAPPING = {
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
   'add.circle.fill': 'plus',
-} as IconMapping;
+};
 
 /**
  * An icon component that uses native SF Symbols on iOS, and Material Icons on Android and web.
@@ -39,5 +39,5 @@ export function IconSymbol({
   style?: StyleProp<TextStyle>;
   weight?: SymbolWeight;
 }) {
-  return <Octicons color={color} size={size} name={MAPPING[name]} style={style} />;
+  return <Octicons color={color} size={size} name={MAPPING[name] as ComponentProps<typeof Octicons>['name']} style={style} />;
 }

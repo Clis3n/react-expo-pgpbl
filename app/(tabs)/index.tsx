@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#A1CEDC',
-    fontSize: 62,
+    fontSize: 42,
     marginBottom: 24,
   },
 });
