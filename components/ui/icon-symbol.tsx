@@ -1,32 +1,24 @@
-// Fallback for using MaterialIcons on Android and web.
+import { MaterialIcons } from '@expo/vector-icons';
+import { type ComponentProps } from 'react';
+import { type StyleProp, type TextStyle } from 'react-native';
 
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import Octicons from '@expo/vector-icons/Octicons';
-import { SymbolViewProps, SymbolWeight } from 'expo-symbols';
-import { ComponentProps } from 'react';
-import { OpaqueColorValue, type StyleProp, type TextStyle } from 'react-native';
+// Ini adalah tipe untuk properti `name` dari komponen MaterialIcons
+type MaterialIconsName = ComponentProps<typeof MaterialIcons>['name'];
 
-type IconMapping = Record<SymbolViewProps['name'], ComponentProps<typeof Octicons>['name']>;
-type IconSymbolName = keyof typeof MAPPING;
-
-/**
- * Add your SF Symbols to Material Icons mappings here.
- * - see Material Icons in the [Icons Directory](https://icons.expo.fyi).
- * - see SF Symbols in the [SF Symbols](https://developer.apple.com/sf-symbols/) app.
- */
+// Definisi tipe dan pemetaan ikon Anda
 const MAPPING = {
-  'house.fill': 'home-fill',
-  'paperplane.fill': 'paper-airplane',
+  'house.fill': 'home',
+  'paperplane.fill': 'send',
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
-  'add.circle.fill': 'plus',
+  'plus': 'add',
+  // Penambahan mapping baru untuk ikon mahasiswa
+  'user.graduate.fill': 'school', // 'school' adalah ikon yang paling mendekati di Material Icons
 };
 
-/**
- * An icon component that uses native SF Symbols on iOS, and Material Icons on Android and web.
- * This ensures a consistent look across platforms, and optimal resource usage.
- * Icon `name`s are based on SF Symbols and require manual mapping to Material Icons.
- */
+type IconSymbolName = keyof typeof MAPPING;
+
+// Fungsi komponen IconSymbol Anda
 export function IconSymbol({
   name,
   size = 24,
@@ -35,9 +27,11 @@ export function IconSymbol({
 }: {
   name: IconSymbolName;
   size?: number;
-  color: string | OpaqueColorValue;
+  color?: string;
   style?: StyleProp<TextStyle>;
-  weight?: SymbolWeight;
 }) {
-  return <Octicons color={color} size={size} name={MAPPING[name] as ComponentProps<typeof Octicons>['name']} style={style} />;
+  // Ambil nama ikon Material Icons dari MAPPING dan pastikan tipenya benar
+  const iconName = MAPPING[name] as MaterialIconsName;
+
+  return <MaterialIcons color={color} size={size} name={iconName} style={style} />;
 }
