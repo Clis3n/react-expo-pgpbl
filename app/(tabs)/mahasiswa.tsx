@@ -1,54 +1,130 @@
-import React, { useState } from 'react'; // Impor useState
-import { StyleSheet, View, Text, SectionList, SafeAreaView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  SectionList,
+  SafeAreaView,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-// HAPUS impor 'useMahasiswa' yang menyebabkan galat
+import { useRouter } from 'expo-router';
 
-// Definisikan data dummy langsung di sini
-const INITIAL_DATA = [
-  {
-    title: 'Asisten',
-    data: ['Asbil', 'Budi', 'Charlie', 'David'],
-  },
-  {
-    title: 'Mahasiswa Kelas A',
-    data: ['Cindy', 'Dina', 'Evi', 'Fani', 'Gina', 'Hani', 'Ika', 'Jeni', 'Kiko'],
-  },
-  {
-    title: 'Mahasiswa Kelas B',
-    data: ['Dono', 'Kasino', 'Indro', 'Toto', 'Joko', 'Budi', 'Charlie', 'David', 'Eko'],
-  },
-];
+// Import Firebase
+import { initializeApp } from 'firebase/app';
+import { getDatabase, ref, onValue } from 'firebase/database';
+
+// Konfigurasi Firebase Anda
+const firebaseConfig = {
+  apiKey: "AIzaSyDquL31FL9x1rw1YD18LGuqb_UQ50EhtDw",
+  authDomain: "pgpbl-ugm.firebaseapp.com",
+  databaseURL: "https://pgpbl-ugm-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "pgpbl-ugm",
+  storageBucket: "pgpbl-ugm.firebasestorage.app",
+  messagingSenderId: "973673114812",
+  appId: "1:973673114812:web:29d49016fd2575d8c434b9",
+  measurementId: "G-Z825JXS898"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
 const MahasiswaScreen = () => {
-  // Gunakan useState untuk menyimpan data secara lokal di komponen ini
-  const [mahasiswaData] = useState(INITIAL_DATA);
+  const [sections, setSections] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const mahasiswaRef = ref(db, 'mahasiswa/');
+    const unsubscribe = onValue(mahasiswaRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const mahasiswaArray = Object.keys(data).map(key => ({
+          id: key,
+          ...data[key]
+        }));
+
+        // Kelompokkan objek mahasiswa berdasarkan kelas
+        const groupedData = mahasiswaArray.reduce((acc, current) => {
+          const key = current.class || 'Lainnya';
+          if (!acc[key]) {
+            acc[key] = [];
+          }
+          acc[key].push(current); // Masukkan seluruh objek, bukan hanya nama
+          return acc;
+        }, {} as Record<string, any[]>);
+
+        // Format untuk SectionList
+        const formattedSections = Object.keys(groupedData).map(title => ({
+          title: title,
+          data: groupedData[title].sort((a: { name: string }, b: { name: string }) => a.name.localeCompare(b.name)),
+        }));
+
+        setSections(formattedSections);
+      } else {
+        setSections([]);
+      }
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color="#FFFFFF" />
+      </View>
+    );
+  }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.headerTitle}>Daftar Hadir Praktikum</Text>
-      </View>
-      
-      <SectionList
-        sections={mahasiswaData}
-        keyExtractor={(item, index) => item + index}
-        contentContainerStyle={styles.listContentContainer}
-        renderItem={({ item, index, section }) => {
-          const isLastItem = index === section.data.length - 1;
-          return (
-            <View style={[styles.itemContainer, isLastItem && styles.lastItemContainer]}>
-              <MaterialIcons name="account-circle" size={24} color="#004A74" />
-              <Text style={styles.itemText}>{item}</Text>
-            </View>
-          );
-        }}
-        renderSectionHeader={({ section: { title } }) => (
-          <Text style={styles.sectionHeader}>{title}</Text>
+    <View style={{ flex: 1 }}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.headerContainer}>
+          <Text style={styles.headerTitle}>Daftar Hadir Praktikum</Text>
+        </View>
+        
+        {sections.length > 0 ? (
+          <SectionList
+            sections={sections}
+            keyExtractor={(item) => item.id} // Gunakan ID unik dari Firebase
+            contentContainerStyle={styles.listContentContainer}
+            renderItem={({ item, index, section }) => {
+              const isLastItem = index === section.data.length - 1;
+              return (
+                // Render item dengan nama dan NIM
+                <View style={[styles.itemContainer, isLastItem && styles.lastItemContainer]}>
+                  <MaterialIcons name="account-circle" size={24} color="#004A74" />
+                  <View style={styles.itemTextContainer}>
+                    <Text style={styles.itemName}>{item.name}</Text>
+                    <Text style={styles.itemSubText}>{item.nim}</Text>
+                  </View>
+                </View>
+              );
+            }}
+            renderSectionHeader={({ section: { title } }) => (
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionHeaderText}>{title}</Text>
+              </View>
+            )}
+            ItemSeparatorComponent={() => <View style={styles.separator} />}
+            renderSectionFooter={() => <View style={{ height: 20 }} />}
+          />
+        ) : (
+          <View style={styles.centered}>
+            <Text style={styles.emptyText}>Belum ada data mahasiswa.</Text>
+          </View>
         )}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-        renderSectionFooter={() => <View style={{ height: 20 }} />}
-      />
-    </SafeAreaView>
+      </SafeAreaView>
+
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={() => router.push({ pathname: '/forminput' })}>
+        <MaterialIcons name="add" size={28} color="#004A74" />
+      </TouchableOpacity>
+    </View>
   );
 };
 
@@ -57,30 +133,45 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#004A74',
   },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    backgroundColor: '#004A74',
+  },
+  emptyText: {
+    color: '#FFFFFF',
+    fontFamily: 'Poppins_400Regular',
+    fontSize: 16,
+    textAlign: 'center',
+  },
   headerContainer: {
     height: 50,
     backgroundColor: '#FFFFFF',
     marginBottom: 16,
+    justifyContent: 'center',
   },
   headerTitle: {
     fontSize: 20,
     fontFamily: 'Poppins_700Bold',
     textAlign: 'center',
     color: '#004A74',
-    paddingTop: 10,
   },
   listContentContainer: {
     paddingHorizontal: 16,
   },
   sectionHeader: {
-    fontSize: 16,
-    fontFamily: 'Poppins_600SemiBold',
     backgroundColor: '#1A5C82',
-    color: '#FFFFFF',
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
+  },
+  sectionHeaderText: {
+    fontSize: 16,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#FFFFFF',
   },
   itemContainer: {
     flexDirection: 'row',
@@ -93,16 +184,36 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
   },
-  itemText: {
-    fontSize: 16,
-    fontFamily: 'Poppins_400Regular',
+  // PERUBAHAN GAYA DI SINI
+  itemTextContainer: {
     marginLeft: 16,
-    color: '#004A74',
+  },
+  itemName: {
+    fontSize: 16,
+    fontFamily: 'Poppins_600SemiBold',
+    color: '#11181C', // Warna nama gelap
+  },
+  itemSubText: {
+    fontSize: 12,
+    fontFamily: 'Poppins_400Regular',
+    color: '#6B7280', // Warna NIM abu-abu
   },
   separator: {
     height: 1,
     backgroundColor: '#EEEEEE',
     marginLeft: 16,
+  },
+  fab: {
+    position: 'absolute',
+    width: 56,
+    height: 56,
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 30,
+    bottom: 30,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 28,
+    elevation: 8,
   },
 });
 

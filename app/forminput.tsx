@@ -10,12 +10,30 @@ import {
   Alert,
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-// HAPUS impor 'useMahasiswa' yang menyebabkan galat
+
+// Import Firebase
+import { initializeApp } from 'firebase/app';
+import { getDatabase, ref, push } from 'firebase/database';
+
+// Konfigurasi Firebase Anda
+const firebaseConfig = {
+  apiKey: "AIzaSyDquL31FL9x1rw1YD18LGuqb_UQ50EhtDw",
+  authDomain: "pgpbl-ugm.firebaseapp.com",
+  databaseURL: "https://pgpbl-ugm-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "pgpbl-ugm",
+  storageBucket: "pgpbl-ugm.firebasestorage.app",
+  messagingSenderId: "973673114812",
+  appId: "1:973673114812:web:29d49016fd2575d8c434b9",
+  measurementId: "G-Z825JXS898"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
 const FormInputScreen = () => {
   const [nama, setNama] = useState('');
   const [nim, setNIM] = useState('');
-
+  
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<string | null>(null);
   const [items, setItems] = useState([
@@ -34,9 +52,20 @@ const FormInputScreen = () => {
       Alert.alert('Error', 'Semua kolom harus diisi!');
       return;
     }
-    // Karena context sudah dihapus, kita hanya tampilkan notifikasi
-    Alert.alert('Sukses', `Data mahasiswa "${nama}" telah disimulasikan untuk disimpan.`);
-    router.back();
+
+    // Logika untuk menyimpan ke Firebase
+    const mahasiswaRef = ref(db, 'mahasiswa/');
+    push(mahasiswaRef, {
+      name: nama,
+      nim: nim,
+      class: value,
+    }).then(() => {
+      Alert.alert('Sukses', `Mahasiswa "${nama}" berhasil ditambahkan.`);
+      router.back();
+    }).catch((error) => {
+      Alert.alert('Error', 'Gagal menyimpan data ke server.');
+      console.error(error);
+    });
   };
 
   return (
@@ -92,7 +121,7 @@ const FormInputScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5ff',
+    backgroundColor: '#f5f5f5',
   },
   formContainer: {
     padding: 20,
