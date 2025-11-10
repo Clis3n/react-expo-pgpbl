@@ -1,14 +1,30 @@
-import React from 'react';
+import React, { useState } from 'react'; // Impor useState
 import { StyleSheet, View, Text, SectionList, SafeAreaView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useMahasiswa } from '@/context/MahasiswaContext';
+// HAPUS impor 'useMahasiswa' yang menyebabkan galat
+
+// Definisikan data dummy langsung di sini
+const INITIAL_DATA = [
+  {
+    title: 'Asisten',
+    data: ['Asbil', 'Budi', 'Charlie', 'David'],
+  },
+  {
+    title: 'Mahasiswa Kelas A',
+    data: ['Cindy', 'Dina', 'Evi', 'Fani', 'Gina', 'Hani', 'Ika', 'Jeni', 'Kiko'],
+  },
+  {
+    title: 'Mahasiswa Kelas B',
+    data: ['Dono', 'Kasino', 'Indro', 'Toto', 'Joko', 'Budi', 'Charlie', 'David', 'Eko'],
+  },
+];
 
 const MahasiswaScreen = () => {
-  const { mahasiswaData } = useMahasiswa();
+  // Gunakan useState untuk menyimpan data secara lokal di komponen ini
+  const [mahasiswaData] = useState(INITIAL_DATA);
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header Utama Halaman */}
       <View style={styles.headerContainer}>
         <Text style={styles.headerTitle}>Daftar Hadir Praktikum</Text>
       </View>
@@ -18,15 +34,9 @@ const MahasiswaScreen = () => {
         keyExtractor={(item, index) => item + index}
         contentContainerStyle={styles.listContentContainer}
         renderItem={({ item, index, section }) => {
-          // Cek apakah item ini adalah yang terakhir di seksinya
           const isLastItem = index === section.data.length - 1;
           return (
-            <View
-              style={[
-                styles.itemContainer,
-                // Terapkan sudut tumpul bawah jika ini item terakhir
-                isLastItem && styles.lastItemContainer,
-              ]}>
+            <View style={[styles.itemContainer, isLastItem && styles.lastItemContainer]}>
               <MaterialIcons name="account-circle" size={24} color="#004A74" />
               <Text style={styles.itemText}>{item}</Text>
             </View>
@@ -36,7 +46,6 @@ const MahasiswaScreen = () => {
           <Text style={styles.sectionHeader}>{title}</Text>
         )}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
-        // Menambahkan jarak antar blok seksi
         renderSectionFooter={() => <View style={{ height: 20 }} />}
       />
     </SafeAreaView>
@@ -46,12 +55,12 @@ const MahasiswaScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#004A74', // Latar belakang utama biru UGM
+    backgroundColor: '#004A74',
   },
   headerContainer: {
     height: 50,
     backgroundColor: '#FFFFFF',
-    marginBottom: 16, // <--- PENAMBAHAN JARAK DI SINI
+    marginBottom: 16,
   },
   headerTitle: {
     fontSize: 20,
@@ -61,16 +70,15 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   listContentContainer: {
-    paddingHorizontal: 16, // Beri jarak kanan-kiri untuk semua daftar
+    paddingHorizontal: 16,
   },
   sectionHeader: {
     fontSize: 16,
     fontFamily: 'Poppins_600SemiBold',
-    backgroundColor: '#1A5C82', // Warna biru yang SAMA
+    backgroundColor: '#1A5C82',
     color: '#FFFFFF',
     paddingVertical: 12,
     paddingHorizontal: 16,
-    // Sudut atas tumpul
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
   },
@@ -79,10 +87,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 14,
-    backgroundColor: '#FFFFFF', // Latar belakang item PUTIH
+    backgroundColor: '#FFFFFF',
   },
   lastItemContainer: {
-    // Sudut bawah tumpul HANYA untuk item terakhir
     borderBottomLeftRadius: 8,
     borderBottomRightRadius: 8,
   },

@@ -1,75 +1,57 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
-import { useRouter } from 'expo-router'; // Impor useRouter
+import { Platform, StyleSheet, View } from 'react-native';
 
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { IconSymbol } from '@/components/ui/icon-symbol';
 
 // Fungsi sederhana untuk membuat huruf pertama kapital
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 export default function HomeScreen() {
-  const router = useRouter(); // Inisialisasi router
-
+  // Router sudah tidak diperlukan di sini
   return (
-    <View style={{ flex: 1 }}>
-      <ParallaxScrollView
-        headerBackgroundColor={{ light: '#ffffff', dark: '#ffffff' }}
-        headerImage={
-          <Image
-            source={require('@/assets/images/ugm-logo.svg')}
-            style={styles.headerImage}
-          />
-        }>
-        <View style={{ backgroundColor: '#004A74', minHeight: '100%' }}>
-          <ThemedView style={styles.titleContainer}>
-            <ThemedText type="title" style={styles.mainTitle}>Profil Mahasiswa</ThemedText>
+    // View pembungkus sudah tidak diperlukan lagi
+    <ParallaxScrollView
+      headerBackgroundColor={{ light: '#ffffff', dark: '#ffffff' }}
+      headerImage={
+        <Image
+          source={require('@/assets/images/ugm-logo.svg')}
+          style={styles.headerImage}
+        />
+      }>
+      <View style={{ backgroundColor: '#004A74', minHeight: '100%' }}>
+        <ThemedView style={styles.titleContainer}>
+          <ThemedText type="title" style={styles.mainTitle}>Profil Mahasiswa</ThemedText>
+        </ThemedView>
+
+        <ThemedView style={styles.profileContainer}>
+          <ThemedView style={styles.profileItem}>
+            <ThemedText style={styles.label}>Nama</ThemedText>
+            <ThemedText style={styles.value}>Clisen Ardy Laksono Wicaksono</ThemedText>
           </ThemedView>
-
-          <ThemedView style={styles.profileContainer}>
-            {/* Informasi Nama */}
-            <ThemedView style={styles.profileItem}>
-              <ThemedText style={styles.label}>Nama</ThemedText>
-              <ThemedText style={styles.value}>Clisen Ardy Laksono Wicaksono</ThemedText>
-            </ThemedView>
-
-            {/* Informasi NIM */}
-            <ThemedView style={styles.profileItem}>
-              <ThemedText style={styles.label}>NIM</ThemedText>
-              <ThemedText style={styles.value}>23/517152/SV/22742</ThemedText>
-            </ThemedView>
-
-            {/* Informasi Program Studi */}
-            <ThemedView style={styles.profileItem}>
-              <ThemedText style={styles.label}>Program Studi</ThemedText>
-              <ThemedText style={styles.value}>Sistem Informasi Geografis</ThemedText>
-            </ThemedView>
-
-            {/* Informasi Fakultas */}
-            <ThemedView style={styles.profileItem}>
-              <ThemedText style={styles.label}>Fakultas</ThemedText>
-              <ThemedText style={styles.value}>Sekolah Vokasi</ThemedText>
-            </ThemedView>
+          <ThemedView style={styles.profileItem}>
+            <ThemedText style={styles.label}>NIM</ThemedText>
+            <ThemedText style={styles.value}>23/517152/SV/22742</ThemedText>
           </ThemedView>
-
-          {/* Bagian Footer Informasi Perangkat */}
-          <ThemedView style={styles.footerContainer}>
-            <ThemedText style={styles.footerText}>
-              Aplikasi ini dijalankan di perangkat {capitalize(Platform.OS)}
-            </ThemedText>
+          <ThemedView style={styles.profileItem}>
+            <ThemedText style={styles.label}>Program Studi</ThemedText>
+            <ThemedText style={styles.value}>Sistem Informasi Geografis</ThemedText>
           </ThemedView>
-        </View>
-      </ParallaxScrollView>
+          <ThemedView style={styles.profileItem}>
+            <ThemedText style={styles.label}>Fakultas</ThemedText>
+            <ThemedText style={styles.value}>Sekolah Vokasi</ThemedText>
+          </ThemedView>
+        </ThemedView>
 
-      {/* Mengubah onPress untuk navigasi ke halaman forminput */}
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={() => router.push('/forminput')}>
-        <IconSymbol name="plus" size={28} color="#004A74" />
-      </TouchableOpacity>
-    </View>
+        <ThemedView style={styles.footerContainer}>
+          <ThemedText style={styles.footerText}>
+            Aplikasi ini dijalankan di perangkat {capitalize(Platform.OS)}
+          </ThemedText>
+        </ThemedView>
+      </View>
+    </ParallaxScrollView>
+    // FAB dan View pembungkusnya sudah dihapus dari sini
   );
 }
 
@@ -126,20 +108,5 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     fontFamily: 'Poppins_400Regular',
   },
-  fab: {
-    position: 'absolute',
-    width: 56,
-    height: 56,
-    alignItems: 'center',
-    justifyContent: 'center',
-    right: 30,
-    bottom: 30,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 28,
-    elevation: 8,
-    shadowColor: '#000',
-    shadowRadius: 4,
-    shadowOpacity: 0.3,
-    shadowOffset: { height: 2, width: 0 },
-  },
+  // Gaya untuk FAB sudah dihapus dari sini
 });

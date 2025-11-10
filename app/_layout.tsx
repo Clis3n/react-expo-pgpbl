@@ -7,8 +7,8 @@ import { useFonts, Poppins_400Regular, Poppins_600SemiBold, Poppins_700Bold } fr
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 
-// PERBAIKAN DI SINI: Path impor tidak boleh menyertakan 'app'
-import { MahasiswaProvider } from '@/context/MahasiswaContext'; 
+// HAPUS BARIS IMPOR INI
+// import { MahasiswaProvider } from '@/context/MahasiswaContext'; 
 
 // Mencegah splash screen hilang secara otomatis sebelum font dimuat
 SplashScreen.preventAutoHideAsync();
@@ -47,14 +47,13 @@ export default function RootLayout() {
   };
 
   return (
-    <MahasiswaProvider>
-      <ThemeProvider value={CustomTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-        </Stack>
-        <StatusBar style="light" />
-      </ThemeProvider>
-    </MahasiswaProvider>
+    // HAPUS PEMBUNGKUS MahasiswaProvider
+    <ThemeProvider value={CustomTheme}>
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+      </Stack>
+      <StatusBar style="light" />
+    </ThemeProvider>
   );
 }

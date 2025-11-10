@@ -31,13 +31,22 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
         }}
       />
-      {/* Penambahan Tab Baru untuk Mahasiswa */}
       <Tabs.Screen
         name="mahasiswa"
         options={{
           title: 'Mahasiswa',
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="user.graduate.fill" color={color} />
+          ),
+        }}
+      />
+      {/* Penambahan Tab Baru untuk Lokasi */}
+      <Tabs.Screen
+        name="lokasi"
+        options={{
+          title: 'Lokasi',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="location.pin.fill" color={color} />
           ),
         }}
       />

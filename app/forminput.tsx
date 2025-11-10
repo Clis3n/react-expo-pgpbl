@@ -9,17 +9,15 @@ import {
   SafeAreaView,
   Alert,
 } from 'react-native';
-// 1. Impor komponen DropDownPicker
 import DropDownPicker from 'react-native-dropdown-picker';
-import { useMahasiswa } from '@/context/MahasiswaContext';
+// HAPUS impor 'useMahasiswa' yang menyebabkan galat
 
 const FormInputScreen = () => {
   const [nama, setNama] = useState('');
   const [nim, setNIM] = useState('');
 
-  // 2. State yang dibutuhkan oleh DropDownPicker
-  const [open, setOpen] = useState(false); // Untuk membuka/menutup dropdown
-  const [value, setValue] = useState<string | null>(null); // Untuk menyimpan nilai yang dipilih
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState<string | null>(null);
   const [items, setItems] = useState([
     { label: 'Asisten', value: 'Asisten' },
     { label: 'Mahasiswa Kelas A', value: 'Mahasiswa Kelas A' },
@@ -29,18 +27,15 @@ const FormInputScreen = () => {
   const [isNamaFocused, setIsNamaFocused] = useState(false);
   const [isNimFocused, setIsNimFocused] = useState(false);
   
-  const { addMahasiswa } = useMahasiswa();
   const router = useRouter();
 
   const handleSave = () => {
-    // Gunakan 'value' dari state dropdown
     if (!nama || !nim || !value) {
       Alert.alert('Error', 'Semua kolom harus diisi!');
       return;
     }
-    addMahasiswa(nama, value);
-    
-    Alert.alert('Sukses', `Mahasiswa "${nama}" berhasil ditambahkan ke ${value}.`);
+    // Karena context sudah dihapus, kita hanya tampilkan notifikasi
+    Alert.alert('Sukses', `Data mahasiswa "${nama}" telah disimulasikan untuk disimpan.`);
     router.back();
   };
 
@@ -71,7 +66,6 @@ const FormInputScreen = () => {
         />
         <Text style={styles.label}>Kelas</Text>
         
-        {/* 3. Implementasi DropDownPicker */}
         <DropDownPicker
           open={open}
           value={value}
@@ -84,7 +78,7 @@ const FormInputScreen = () => {
           placeholderStyle={styles.placeholderStyle}
           dropDownContainerStyle={styles.dropDownContainer}
           textStyle={styles.dropdownText}
-          zIndex={1000} // Penting agar dropdown muncul di atas elemen lain
+          zIndex={1000}
         />
         
         <TouchableOpacity style={styles.button} onPress={handleSave}>
@@ -98,7 +92,7 @@ const FormInputScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f5f5ff',
   },
   formContainer: {
     padding: 20,
@@ -125,7 +119,6 @@ const styles = StyleSheet.create({
     borderColor: '#004A74',
     borderWidth: 2,
   },
-  // 4. Gaya untuk Dropdown agar sesuai tema
   dropdown: {
     backgroundColor: '#FFFFFF',
     borderColor: '#DDDDDD',
@@ -152,7 +145,6 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 8,
     alignItems: 'center',
-    // Gunakan zIndex negatif agar tombol berada di bawah dropdown jika dropdown terbuka
     zIndex: -1,
   },
   buttonText: {

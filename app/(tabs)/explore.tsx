@@ -95,15 +95,6 @@ export default function TabTwoScreen() {
           ),
         })}
       </Collapsible>
-
-      <TouchableOpacity style={styles.fab}>
-        <IconSymbol
-          size={32}
-          color="#ffffffff"
-          name="add.circle.fill"
-        />
-      </TouchableOpacity>
-
     </ParallaxScrollView>
   );
 }

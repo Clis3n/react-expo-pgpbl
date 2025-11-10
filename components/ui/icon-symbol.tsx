@@ -12,8 +12,9 @@ const MAPPING = {
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
   'plus': 'add',
-  // Penambahan mapping baru untuk ikon mahasiswa
-  'user.graduate.fill': 'school', // 'school' adalah ikon yang paling mendekati di Material Icons
+  'user.graduate.fill': 'school',
+  // Penambahan mapping baru untuk ikon lokasi
+  'location.pin.fill': 'location-pin',
 };
 
 type IconSymbolName = keyof typeof MAPPING;
