@@ -25,13 +25,6 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Lainnya',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
-      <Tabs.Screen
         name="mahasiswa"
         options={{
           title: 'Mahasiswa',
@@ -40,13 +33,31 @@ export default function TabLayout() {
           ),
         }}
       />
-      {/* Penambahan Tab Baru untuk Lokasi */}
       <Tabs.Screen
         name="lokasi"
         options={{
           title: 'Lokasi',
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="location.pin.fill" color={color} />
+          ),
+        }}
+      />
+      {/* PENAMBAHAN TAB PETA BARU */}
+      <Tabs.Screen
+        name="mapleaflet"
+        options={{
+          title: 'Peta OSM',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="map.fill" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="mapgoogle"
+        options={{
+          title: 'Peta Google',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name="globe.fill" color={color} />
           ),
         }}
       />

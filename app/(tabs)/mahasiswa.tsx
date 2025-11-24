@@ -11,24 +11,11 @@ import {
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
-// Import Firebase
-import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, onValue } from 'firebase/database';
+// HANYA IMPORT 'db' DARI FILE KONFIGURASI
+import { db } from '../firebase/config';
+import { ref, onValue } from 'firebase/database';
 
-// Konfigurasi Firebase Anda
-const firebaseConfig = {
-  apiKey: "AIzaSyDquL31FL9x1rw1YD18LGuqb_UQ50EhtDw",
-  authDomain: "pgpbl-ugm.firebaseapp.com",
-  databaseURL: "https://pgpbl-ugm-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "pgpbl-ugm",
-  storageBucket: "pgpbl-ugm.firebasestorage.app",
-  messagingSenderId: "973673114812",
-  appId: "1:973673114812:web:29d49016fd2575d8c434b9",
-  measurementId: "G-Z825JXS898"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+// HAPUS BLOK KODE firebaseConfig DAN initializeApp DARI SINI
 
 const MahasiswaScreen = () => {
   const [sections, setSections] = useState<any[]>([]);
@@ -44,30 +31,24 @@ const MahasiswaScreen = () => {
           id: key,
           ...data[key]
         }));
-
-        // Kelompokkan objek mahasiswa berdasarkan kelas
         const groupedData = mahasiswaArray.reduce((acc, current) => {
           const key = current.class || 'Lainnya';
           if (!acc[key]) {
             acc[key] = [];
           }
-          acc[key].push(current); // Masukkan seluruh objek, bukan hanya nama
+          acc[key].push(current);
           return acc;
         }, {} as Record<string, any[]>);
-
-        // Format untuk SectionList
         const formattedSections = Object.keys(groupedData).map(title => ({
           title: title,
           data: groupedData[title].sort((a: { name: string }, b: { name: string }) => a.name.localeCompare(b.name)),
         }));
-
         setSections(formattedSections);
       } else {
         setSections([]);
       }
       setLoading(false);
     });
-
     return () => unsubscribe();
   }, []);
 
@@ -80,21 +61,19 @@ const MahasiswaScreen = () => {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: '#004A74' }}>
       <SafeAreaView style={styles.container}>
         <View style={styles.headerContainer}>
           <Text style={styles.headerTitle}>Daftar Hadir Praktikum</Text>
         </View>
-        
         {sections.length > 0 ? (
           <SectionList
             sections={sections}
-            keyExtractor={(item) => item.id} // Gunakan ID unik dari Firebase
+            keyExtractor={(item) => item.id}
             contentContainerStyle={styles.listContentContainer}
             renderItem={({ item, index, section }) => {
               const isLastItem = index === section.data.length - 1;
               return (
-                // Render item dengan nama dan NIM
                 <View style={[styles.itemContainer, isLastItem && styles.lastItemContainer]}>
                   <MaterialIcons name="account-circle" size={24} color="#004A74" />
                   <View style={styles.itemTextContainer}>
@@ -118,7 +97,6 @@ const MahasiswaScreen = () => {
           </View>
         )}
       </SafeAreaView>
-
       <TouchableOpacity
         style={styles.fab}
         onPress={() => router.push({ pathname: '/forminput' })}>

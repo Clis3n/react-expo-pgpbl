@@ -11,24 +11,8 @@ import {
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-// Import Firebase
-import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, push } from 'firebase/database';
-
-// Konfigurasi Firebase Anda
-const firebaseConfig = {
-  apiKey: "AIzaSyDquL31FL9x1rw1YD18LGuqb_UQ50EhtDw",
-  authDomain: "pgpbl-ugm.firebaseapp.com",
-  databaseURL: "https://pgpbl-ugm-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "pgpbl-ugm",
-  storageBucket: "pgpbl-ugm.firebasestorage.app",
-  messagingSenderId: "973673114812",
-  appId: "1:973673114812:web:29d49016fd2575d8c434b9",
-  measurementId: "G-Z825JXS898"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+import { db } from './firebase/config';
+import { ref, push } from 'firebase/database';
 
 const FormInputScreen = () => {
   const [nama, setNama] = useState('');
@@ -53,7 +37,6 @@ const FormInputScreen = () => {
       return;
     }
 
-    // Logika untuk menyimpan ke Firebase
     const mahasiswaRef = ref(db, 'mahasiswa/');
     push(mahasiswaRef, {
       name: nama,
@@ -118,6 +101,7 @@ const FormInputScreen = () => {
   );
 };
 
+// StyleSheet yang sudah diperbaiki dan disesuaikan
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -174,6 +158,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 8,
     alignItems: 'center',
+    marginTop: 20, // Tambahkan margin agar tidak terlalu mepet
     zIndex: -1,
   },
   buttonText: {
@@ -183,4 +168,5 @@ const styles = StyleSheet.create({
   },
 });
 
+// Perbaiki nama ekspor di sini
 export default FormInputScreen;

@@ -2,10 +2,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { type ComponentProps } from 'react';
 import { type StyleProp, type TextStyle } from 'react-native';
 
-// Ini adalah tipe untuk properti `name` dari komponen MaterialIcons
 type MaterialIconsName = ComponentProps<typeof MaterialIcons>['name'];
 
-// Definisi tipe dan pemetaan ikon Anda
 const MAPPING = {
   'house.fill': 'home',
   'paperplane.fill': 'send',
@@ -13,13 +11,14 @@ const MAPPING = {
   'chevron.right': 'chevron-right',
   'plus': 'add',
   'user.graduate.fill': 'school',
-  // Penambahan mapping baru untuk ikon lokasi
   'location.pin.fill': 'location-pin',
+  // PENAMBAHAN MAPPING IKON PETA
+  'map.fill': 'map',
+  'globe.fill': 'public', // 'public' adalah ikon globe di Material Icons
 };
 
 type IconSymbolName = keyof typeof MAPPING;
 
-// Fungsi komponen IconSymbol Anda
 export function IconSymbol({
   name,
   size = 24,
@@ -31,8 +30,6 @@ export function IconSymbol({
   color?: string;
   style?: StyleProp<TextStyle>;
 }) {
-  // Ambil nama ikon Material Icons dari MAPPING dan pastikan tipenya benar
   const iconName = MAPPING[name] as MaterialIconsName;
-
   return <MaterialIcons color={color} size={size} name={iconName} style={style} />;
 }
